@@ -1,12 +1,12 @@
-== Pipelining ==
+# Pipelining
 Create a dynamic workflow pipeline. Pipeline steps can be loaded as libraries (e.g. .so files).
 
 For now, pipeline steps are functions, i.e. they are static (no state). I might change this later.
 
-== Dependencies ==
+## Dependencies
 * dlopen library
 
-== Comments ==
+## Comments
 For the dynamic loading to work, make sure you expose your step functions as C API. In most cases, a simple extern "C" will do.
 
 For example (lifted from dlopen tutorial), hello.cpp:
