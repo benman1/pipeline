@@ -13,7 +13,7 @@ These steps are then applied one by one.
 ## Dependencies
 * dlopen library
 
-## Comments
+## Walkthrough
 For the dynamic loading to work, make sure you expose your step functions as C API. In most cases, a simple extern "C" will do.
 
 For example, step1.cpp:
@@ -37,3 +37,14 @@ Compile pipeline.cpp as follows:
 ```bash
 g++ -std=c++1z pipeline.cpp -o pipeline
 ```
+
+Executing you initialize a vector and then apply the step(s):
+```bash
+before...
+0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9
+Loading step function step1 from step1.so
+
+after...
+0 0.5 1 1.5 2 2.5 3 3.5 4 4.5
+```
+
