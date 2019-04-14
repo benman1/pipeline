@@ -49,7 +49,7 @@ int main() {
     pipeline->exe(my_vector);
     return 0;
 }
-```cpp
+```
 
 Compile run_pipeline.cpp as follows:
 ```bash
@@ -57,7 +57,7 @@ g++ -std=c++1z run_pipeline.cpp pipeline.cpp -o run_pipeline
 ```
 
 Executing you initialize a vector and then apply the step(s):
-```bash
+```
 before...
 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9
 Loading step function step1 from step1.so
