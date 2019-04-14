@@ -3,6 +3,13 @@ Create a dynamic workflow pipeline. Pipeline steps can be loaded as libraries (e
 
 For now, pipeline steps are functions, i.e. they are static (no state). I might change this later.
 
+The pipeline can be defined in terms of transformations that get a vector and pass a vector (by reference, obviously). In the pipeline.cpp file, a file, pipeline.lst, is read that contains the processing steps:
+```bash
+step1.so step1
+```
+
+These steps are then applied one by one.
+
 ## Dependencies
 * dlopen library
 
