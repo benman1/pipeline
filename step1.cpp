@@ -1,4 +1,4 @@
-#include "types.hpp"
+#include "pipeline.hpp"
 
 
 extern "C" Vector* step1(Vector *input) {

@@ -18,7 +18,7 @@ For the dynamic loading to work, make sure you expose your step functions as C A
 
 For example, step1.cpp:
 ```cpp
-#include "types.hpp"
+#include "pipeline.hpp"
 
 extern "C" Vector* step1(Vector *input) {
     for(int i=0; i<input->size; i++) {
@@ -33,9 +33,9 @@ Compile this into a shared library like so:
 g++ -fPIC step1.cpp -shared -o step1.so -std=gnu++11
 ```
 
-Compile pipeline.cpp as follows:
+Compile run_pipeline.cpp as follows:
 ```bash
-g++ -std=c++1z pipeline.cpp -o pipeline
+g++ -std=c++1z run_pipeline.cpp pipeline.cpp -o run_pipeline
 ```
 
 Executing you initialize a vector and then apply the step(s):

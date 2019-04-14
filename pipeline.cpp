@@ -1,26 +1,44 @@
-#include "load_step.hpp"
-#include "types.hpp"
 #include <iostream>
-#include <type_traits>
-#include <list>
-#include <vector>
-#include <fstream>
-#include <sstream>
+#include <dlfcn.h>
+#include "pipeline.hpp"
 
 
-void print_vector(Vector *input) {
-    for(int i=0; i<input->size; i++) {
-        std::cout << input->array[i] << " ";
+void Vector::display() {
+    for(int i=0; i<this->size; i++) {
+        std::cout << this->array[i] << " ";
     }
     std::cout << "\n";
     return;
 }
 
-std::list<STEP_FN> load_pipeline(std::string pipeline_filename) {
-    std::list<STEP_FN> pipeline;
+STEP_FN Pipeline::load_step(const char* file_name, const char* function_name) {
+    using std::cout;
+    using std::cerr;
 
+    cout << "Loading step function " << function_name << " from " << file_name << "\n";
+
+    void* handle = dlopen(file_name, RTLD_LAZY);
+
+    if(!handle) {
+        cerr << "Can't open " << file_name << "\n";
+        exit(1);
+    }
+
+    dlerror();
+    STEP_FN hello = (STEP_FN) dlsym(handle, function_name);
+    const char *dlsym_error = dlerror();
+    if (dlsym_error) {
+        cerr << "Cannot load symbol " << function_name << " and cast it to STEP_FN \n";
+        dlclose(handle);
+        exit(1);
+    }
+
+    return hello;
+}
+
+Pipeline::Pipeline(const char* pipeline_filename) {
     std::ifstream pipeline_file(pipeline_filename);
-    std::string str; 
+    std::string str;
     std::istringstream iss;
     while (std::getline(pipeline_file, str)) {
         std::vector<std::string> result;
@@ -30,26 +48,17 @@ std::list<STEP_FN> load_pipeline(std::string pipeline_filename) {
         }
 
         STEP_FN step1 = load_step(result[0].c_str(), result[1].c_str());
-        pipeline.push_back(step1);
+        this->pipeline.push_back(step1);
     }
-    return pipeline;
 }
 
-int main() {
-    // initialize vector with some elements
-    Vector* my_vector = new Vector(10);
-    for(int i=0; i<10; i++) {
-        my_vector->array[i] = 0.1 * i;
-    }
-    std::cout << "before... \n";
-    print_vector(my_vector);
+Vector* Pipeline::exe(Vector* input) {
+    input->display();
 
-    std::list<STEP_FN> pipeline = load_pipeline("pipeline.lst");
-
-    for(STEP_FN step: pipeline) {
-        my_vector = step(my_vector);
+    for(STEP_FN step: this->pipeline) {
+        input = step(input);
     }
     std::cout << "\nafter... \n";
-    print_vector(my_vector);
-    return 0;
+    input->display();
+    return input;
 }
