@@ -1,13 +1,11 @@
 #include "load_step.hpp"
 #include "types.hpp"
-#include "types.hpp"
 #include <iostream>
 #include <type_traits>
 #include <list>
 #include <vector>
 #include <fstream>
 #include <sstream>
-
 
 
 void print_vector(Vector *input) {
@@ -18,11 +16,10 @@ void print_vector(Vector *input) {
     return;
 }
 
-std::list<STEP_FN> load_pipeline(char* pipeline_filename) {
-    typedef std::pair<const char *, const char *> StrLimits;
+std::list<STEP_FN> load_pipeline(std::string pipeline_filename) {
     std::list<STEP_FN> pipeline;
 
-    std::ifstream pipeline_file("pipeline.lst");
+    std::ifstream pipeline_file(pipeline_filename);
     std::string str; 
     std::istringstream iss;
     while (std::getline(pipeline_file, str)) {
@@ -39,10 +36,10 @@ std::list<STEP_FN> load_pipeline(char* pipeline_filename) {
 }
 
 int main() {
+    // initialize vector with some elements
     Vector* my_vector = new Vector(10);
     for(int i=0; i<10; i++) {
         my_vector->array[i] = 0.1 * i;
-        //std::cout << my_vector[i];
     }
     std::cout << "before... \n";
     print_vector(my_vector);
