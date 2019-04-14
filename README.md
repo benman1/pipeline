@@ -33,6 +33,24 @@ Compile this into a shared library like so:
 g++ -fPIC step1.cpp -shared -o step1.so -std=gnu++11
 ```
 
+In order to run the pipeline, provide a configuration, define a vector, and execute (run_pipeline.hpp):
+```cpp
+#include "pipeline.hpp"
+
+
+int main() {
+    // initialize vector with some elements
+    Vector* my_vector = new Vector(10);
+    for(int i=0; i<10; i++) {
+        my_vector->array[i] = 0.1 * i;
+    }
+
+    Pipeline* pipeline = new Pipeline("pipeline.lst");
+    pipeline->exe(my_vector);
+    return 0;
+}
+```cpp
+
 Compile run_pipeline.cpp as follows:
 ```bash
 g++ -std=c++1z run_pipeline.cpp pipeline.cpp -o run_pipeline
