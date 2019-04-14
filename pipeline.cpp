@@ -4,6 +4,10 @@
 #include <iostream>
 #include <type_traits>
 #include <list>
+#include <vector>
+#include <fstream>
+#include <sstream>
+
 
 
 void print_vector(Vector *input) {
@@ -12,6 +16,26 @@ void print_vector(Vector *input) {
     }
     std::cout << "\n";
     return;
+}
+
+std::list<STEP_FN> load_pipeline(char* pipeline_filename) {
+    typedef std::pair<const char *, const char *> StrLimits;
+    std::list<STEP_FN> pipeline;
+
+    std::ifstream pipeline_file("pipeline.lst");
+    std::string str; 
+    std::istringstream iss;
+    while (std::getline(pipeline_file, str)) {
+        std::vector<std::string> result;
+        iss = std::istringstream(str);
+        for(std::string s; iss >> s; ) {
+            result.push_back(s);
+        }
+
+        STEP_FN step1 = load_step(result[0].c_str(), result[1].c_str());
+        pipeline.push_back(step1);
+    }
+    return pipeline;
 }
 
 int main() {
@@ -23,9 +47,7 @@ int main() {
     std::cout << "before... \n";
     print_vector(my_vector);
 
-    STEP_FN step1 = load_step("step1.so", "step1");
-    std::list<STEP_FN> pipeline;
-    pipeline.push_back(step1);
+    std::list<STEP_FN> pipeline = load_pipeline("pipeline.lst");
 
     for(STEP_FN step: pipeline) {
         my_vector = step(my_vector);
