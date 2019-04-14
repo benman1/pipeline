@@ -34,6 +34,15 @@ STEP_FN Pipeline::load_step(const char* file_name, const char* function_name) {
     return hello;
 }
 
+void Pipeline::add(const char* file_name, const char* function_name) {
+    STEP_FN step1 = load_step(file_name, function_name);
+    this->pipeline.push_back(step1);
+}
+
+void Pipeline::clear() {
+    this->pipeline.clear();
+}
+
 Pipeline::Pipeline(const char* pipeline_filename) {
     std::ifstream pipeline_file(pipeline_filename);
     std::string str;
@@ -45,8 +54,7 @@ Pipeline::Pipeline(const char* pipeline_filename) {
             result.push_back(s);
         }
 
-        STEP_FN step1 = load_step(result[0].c_str(), result[1].c_str());
-        this->pipeline.push_back(step1);
+        this->add(result[0].c_str(), result[1].c_str());
     }
 }
 

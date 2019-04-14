@@ -24,6 +24,8 @@ class Pipeline {
     public:
         Vector* exe(Vector* input);
         Pipeline(const char* config_file_name);
+        void add(const char*, const char*);
+        void clear();
 
     private:
         STEP_FN load_step(const char* so_file_name, const char* function_name);

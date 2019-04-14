@@ -33,7 +33,7 @@ Compile this into a shared library like so:
 g++ -fPIC step1.cpp -shared -o step1.so -std=gnu++11
 ```
 
-In order to run the pipeline, provide a configuration, define a vector, and execute (run_pipeline.hpp):
+In order to run the pipeline, provide a configuration, define a vector, and execute (run_pipeline.cpp):
 ```cpp
 #include "pipeline.hpp"
 
