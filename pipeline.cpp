@@ -9,34 +9,39 @@ void Vector::display() {
     return;
 }
 
-STEP_FN Pipeline::load_step(const char* file_name, const char* function_name) {
+// Given a filename of a shared library to load, load a factory function
+// of type TransformerFactory that initializes the new transformer class.
+// The factory function must be called "transformer_factory"
+// This follows the pattern in https://www.linuxjournal.com/article/3687
+transformer* Pipeline::load_transformer(const char* file_name) {
     using std::cout;
     using std::cerr;
 
-    cout << "Loading step function " << function_name << " from " << file_name << "\n";
+    cout << "Loading transformer class from " << file_name << "\n";
 
-    void* handle = dlopen(file_name, RTLD_LAZY);
-
+    void* handle = dlopen(file_name, RTLD_NOW);
     if(!handle) {
         cerr << "Can't open " << file_name << "\n";
-        exit(1);
+        cerr << dlerror() << "\n";
+        exit(-1);
     }
 
-    dlerror();
-    STEP_FN hello = (STEP_FN) dlsym(handle, function_name);
+    void *fn = dlsym(handle, "transformer_factory");
+    transformer *my_transformer = static_cast<transformer*>(fn);
+
     const char *dlsym_error = dlerror();
     if (dlsym_error) {
-        cerr << "Cannot load symbol " << function_name << " and cast it to STEP_FN \n";
+        cerr << "Cannot load symbol transformer_factory and execute it\n";
         dlclose(handle);
-        exit(1);
+        exit(-1);
     }
 
-    return hello;
+    return my_transformer;
 }
 
-void Pipeline::add(const char* file_name, const char* function_name) {
-    STEP_FN step1 = load_step(file_name, function_name);
-    this->pipeline.push_back(step1);
+void Pipeline::add(const char* file_name, const char* transformer_name) {
+    transformer *my_transformer = load_transformer(file_name);
+    this->pipeline[transformer_name] = my_transformer;
 }
 
 void Pipeline::clear() {
@@ -61,8 +66,8 @@ Pipeline::Pipeline(const char* pipeline_filename) {
 Vector* Pipeline::exe(Vector* input) {
     input->display();
 
-    for(STEP_FN step: this->pipeline) {
-        input = step(input);
+    for(const auto& trans_pair: this->pipeline) {
+        input = trans_pair.second->transform(input);
     }
     std::cout << "\nafter... \n";
     input->display();

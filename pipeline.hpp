@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include <list>
+#include <map>
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -15,7 +15,7 @@ class Vector {
         double* target;
         Vector(long size) {
             this->size = size;
-            this->size_y = 1
+            this->size_y = 1;
             this->allocate();
         };
         Vector(long size, long size_y) {
@@ -31,15 +31,16 @@ class Vector {
         }
 };
 
-class Transformer {
+class transformer {
     public:
         virtual Vector* transform(Vector*)=0;
         bool transformable=true;
-        virtual void reset()=0;
-        virtual void load(const char* filename)=0;
-        virtual void save(const char* filename)=0;
-}
-typedef Transformer *TransformerFactory();
+        //virtual void reset()=0;
+        //virtual void load(const char* filename)=0;
+        //virtual void save(const char* filename)=0;
+};
+
+typedef transformer *TransformerFactory();
 
 class Pipeline {
     public:
@@ -49,6 +50,6 @@ class Pipeline {
         void clear();
 
     private:
-        STEP_FN load_step(const char* so_file_name, const char* function_name);
-        std::list<STEP_FN> pipeline;
+        transformer* load_transformer(const char* so_file_name);
+        std::map<const char*, transformer*> pipeline;
 };
