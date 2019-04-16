@@ -10,12 +10,25 @@
 class Vector {
     public:
         long size;
+        long size_y;
         double* array;
+        double* target;
         Vector(long size) {
             this->size = size;
-            array = new double[size];
+            this->size_y = 1
+            this->allocate();
+        };
+        Vector(long size, long size_y) {
+            this->size = size;
+            this->size_y = size_y;
+            this->allocate();
         };
         void display();
+    private:
+        void allocate() {
+            array = new double[size];
+            target = new double[size_y];
+        }
 };
 
 typedef Vector* (*STEP_FN)(Vector*);
