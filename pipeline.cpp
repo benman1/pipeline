@@ -26,8 +26,8 @@ transformer* Pipeline::load_transformer(const char* file_name) {
         exit(-1);
     }
 
-    void *fn = dlsym(handle, "transformer_factory");
-    transformer *my_transformer = static_cast<transformer*>(fn);
+    TransformerFactory my_factory = (TransformerFactory) dlsym(handle, "transformer_factory");
+    transformer *my_transformer = my_factory();
 
     const char *dlsym_error = dlerror();
     if (dlsym_error) {
@@ -67,6 +67,7 @@ Vector* Pipeline::exe(Vector* input) {
     input->display();
 
     for(const auto& trans_pair: this->pipeline) {
+        std::cout << trans_pair.first << "\n";
         input = trans_pair.second->transform(input);
     }
     std::cout << "\nafter... \n";

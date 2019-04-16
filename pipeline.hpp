@@ -34,13 +34,13 @@ class Vector {
 class transformer {
     public:
         virtual Vector* transform(Vector*)=0;
-        bool transformable=true;
+        bool trainable=true;  // whether transformer weights are updated
         //virtual void reset()=0;
         //virtual void load(const char* filename)=0;
         //virtual void save(const char* filename)=0;
 };
 
-typedef transformer *TransformerFactory();
+typedef transformer* (*TransformerFactory)();
 
 class Pipeline {
     public:
