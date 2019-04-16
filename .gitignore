@@ -3,3 +3,4 @@
 !*.*
 *.so
 *.out
+.DS_Store
