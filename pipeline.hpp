@@ -31,7 +31,15 @@ class Vector {
         }
 };
 
-typedef Vector* (*STEP_FN)(Vector*);
+class Transformer {
+    public:
+        virtual Vector* transform(Vector*)=0;
+        bool transformable=true;
+        virtual void reset()=0;
+        virtual void load(const char* filename)=0;
+        virtual void save(const char* filename)=0;
+}
+typedef Transformer *TransformerFactory();
 
 class Pipeline {
     public:
