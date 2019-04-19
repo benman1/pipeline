@@ -2,9 +2,9 @@
 
 class multiplier: public transformer {
     public:
-        Vector* transform(Vector* input) {
-            for(int i=0; i<input->size; i++) {
-                input->array[i] *= 5;
+        DataPoint* transform(DataPoint* input) {
+            for(int i=0; i<input->x->size; i++) {
+                input->x->array[i] *= 5;
             }
             return input;
         }

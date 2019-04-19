@@ -63,14 +63,14 @@ Pipeline::Pipeline(const char* pipeline_filename) {
     }
 }
 
-Vector* Pipeline::exe(Vector* input) {
-    input->display();
+DataPoint* Pipeline::exe(DataPoint* input) {
+    input->x->display();
 
     for(const auto& trans_pair: this->pipeline) {
         std::cout << trans_pair.first << "\n";
         input = trans_pair.second->transform(input);
     }
     std::cout << "\nafter... \n";
-    input->display();
+    input->x->display();
     return input;
 }
