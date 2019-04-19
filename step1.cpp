@@ -4,7 +4,7 @@ class multiplier: public transformer {
     public:
         DataPoint* transform(DataPoint* input) {
             for(int i=0; i<input->x->size; i++) {
-                input->x->array[i] *= 5;
+                (*input->x)[i] *= 5.0;
             }
             return input;
         }

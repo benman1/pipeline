@@ -4,19 +4,30 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <string>
 #include <dlfcn.h>
 
 
 class Vector {
     public:
         long size;
-        double* array;
         Vector(long size) {
             this->size = size;
             this->allocate();
         };
+        Vector(long size, double val) {
+            this->size = size;
+            this->allocate();
+            for(long i=0; i<size; i++) {
+                this->array[i] = val;
+            }
+        };
         void display();
+        inline double& operator[] (const long index) {
+            return array[index];
+        }
     private:
+        double* array;
         void allocate() {
             array = new double[size];
         }
@@ -30,6 +41,7 @@ class DataPoint {
         }
         DataPoint(Vector *x, Vector *y) {
             this->x = x;
+            this->y = y;
         }
 };
 
@@ -53,5 +65,5 @@ class Pipeline {
 
     private:
         transformer* load_transformer(const char* so_file_name);
-        std::map<const char*, transformer*> pipeline;
+        std::map<std::string, transformer*> pipeline;
 };

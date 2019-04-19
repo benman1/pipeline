@@ -3,13 +3,18 @@
 
 int main() {
     // initialize vector with some elements
-    Vector* my_vector = new Vector(10);
+    Vector* my_vector = new Vector(10, 0.0);
+    Vector* targets = new Vector(1, 1.0);
+    DataPoint *row = new DataPoint(my_vector, targets);
     for(int i=0; i<10; i++) {
-        my_vector->array[i] = 0.1 * i;
+        (*my_vector)[i] = 0.1 * i;
     }
-    DataPoint *row = new DataPoint(my_vector);
 
     Pipeline* pipeline = new Pipeline("pipeline.lst");
-    pipeline->exe(row);
+
+    for(long i=0; i<100; i++) {
+        row = pipeline->exe(row);
+        //row->y->display();
+    }
     return 0;
 }

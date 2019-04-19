@@ -3,7 +3,7 @@
 
 void Vector::display() {
     for(int i=0; i<this->size; i++) {
-        std::cout << this->array[i] << " ";
+        std::cout << (this->array)[i] << " ";
     }
     std::cout << "\n";
     return;
@@ -69,8 +69,7 @@ DataPoint* Pipeline::exe(DataPoint* input) {
     for(const auto& trans_pair: this->pipeline) {
         std::cout << trans_pair.first << "\n";
         input = trans_pair.second->transform(input);
+        input->x->display();
     }
-    std::cout << "\nafter... \n";
-    input->x->display();
     return input;
 }
