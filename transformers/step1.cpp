@@ -1,4 +1,4 @@
-#include "pipeline.hpp"
+#include "../pipeline.hpp"
 
 class multiplier : public transformer {
    public:
