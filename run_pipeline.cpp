@@ -11,7 +11,7 @@ int main() {
 
     Pipeline* pipeline = new Pipeline("pipeline.lst");
 
-    for(unsigned epoch=0; epoch<5; epoch++)
+    for(unsigned epoch=0; epoch<100; epoch++)
         pipeline->exe(row);
     return 0;
 }
