@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <map>
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -10,22 +9,30 @@
 
 class Vector {
     public:
-        long size;
-        Vector(long size) {
+        unsigned size;
+        Vector(unsigned size) {
             this->size = size;
             this->allocate();
         };
-        Vector(long size, double val) {
+        Vector(unsigned size, double val) {
             this->size = size;
             this->allocate();
-            for(long i=0; i<size; i++) {
+            for(unsigned i=0; i<size; i++) {
                 this->array[i] = val;
             }
         };
         void display();
-        inline double& operator[] (const long index) {
+        inline double& at(const unsigned index) {
             return array[index];
         }
+        inline double& operator[] (unsigned index) {
+            return array[index];
+        }
+
+        inline ~Vector() {
+            delete[] array;
+        }
+
     private:
         double* array;
         void allocate() {
@@ -35,18 +42,19 @@ class Vector {
 
 class DataPoint {
     public:
-        Vector *x, *y;
-        DataPoint(Vector *x) {
+        DataPoint(Vector &x) {
             this->x = x;
         }
-        DataPoint(Vector *x, Vector *y) {
+        DataPoint(Vector &x, Vector &y) {
             this->x = x;
             this->y = y;
         }
+        Vector x = NULL, y=NULL;
 };
 
 class transformer {
     public:
+        std::string name;
         virtual DataPoint* transform(DataPoint*)=0;
         bool trainable=true;  // whether transformer weights are updated
         //virtual void reset()=0;
@@ -65,5 +73,5 @@ class Pipeline {
 
     private:
         transformer* load_transformer(const char* so_file_name);
-        std::map<std::string, transformer*> pipeline;
+        std::vector<transformer*> pipeline;
 };

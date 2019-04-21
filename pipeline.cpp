@@ -2,7 +2,7 @@
 
 
 void Vector::display() {
-    for(int i=0; i<this->size; i++) {
+    for(unsigned i=0; i<this->size; i++) {
         std::cout << (this->array)[i] << " ";
     }
     std::cout << "\n";
@@ -41,7 +41,8 @@ transformer* Pipeline::load_transformer(const char* file_name) {
 
 void Pipeline::add(const char* file_name, const char* transformer_name) {
     transformer *my_transformer = load_transformer(file_name);
-    this->pipeline[transformer_name] = my_transformer;
+    auto it = this->pipeline.begin();
+    this->pipeline.insert(it, my_transformer);
 }
 
 void Pipeline::clear() {
@@ -64,12 +65,12 @@ Pipeline::Pipeline(const char* pipeline_filename) {
 }
 
 DataPoint* Pipeline::exe(DataPoint* input) {
-    input->x->display();
+    input->x.display();
 
-    for(const auto& trans_pair: this->pipeline) {
-        std::cout << trans_pair.first << "\n";
-        input = trans_pair.second->transform(input);
-        input->x->display();
+    for(const auto& transformer: this->pipeline) {
+        std::cout << transformer->name << "\n";
+        input = transformer->transform(input);
+        input->x.display();
     }
     return input;
 }

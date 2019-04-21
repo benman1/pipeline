@@ -22,9 +22,9 @@ For example, step1.cpp:
 
 class multiplier: public transformer {
     public:
-        Vector* transform(Vector* input) {
+        DataPoint* transform(DataPoint* input) {
             for(int i=0; i<input->size; i++) {
-                input->array[i] *= 5;
+                input->x[i] *= 5;
             }
             return input;
         }
@@ -47,13 +47,16 @@ In order to run the pipeline, provide a configuration, define a vector, and exec
 
 int main() {
     // initialize vector with some elements
-    Vector* my_vector = new Vector(10);
-    for(int i=0; i<10; i++) {
-        my_vector->array[i] = 0.1 * i;
+    Vector my_vector(10, 0.0);
+    Vector targets(5, 1.0);
+    DataPoint *row = new DataPoint(my_vector, targets);
+    for(unsigned i=0; i<10; i++) {
+        my_vector.at(i) = 0.1 * i;
     }
 
     Pipeline* pipeline = new Pipeline("pipeline.lst");
-    pipeline->exe(my_vector);
+    DataPoint* result;
+    result = pipeline->exe(row);
     return 0;
 }
 ```
@@ -65,10 +68,10 @@ g++ -std=c++1z run_pipeline.cpp pipeline.cpp -o run_pipeline
 
 Executing you initialize a vector and then apply the step(s):
 ```
+./run_pipeline
+Loading transformer class from step1.so
 0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9
-step1
 
-after...
 0 0.5 1 1.5 2 2.5 3 3.5 4 4.5
 ```
 
