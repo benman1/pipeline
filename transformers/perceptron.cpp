@@ -5,10 +5,10 @@
 
 class perceptron : public transformer {
    public:
-    DataPoint* transform(DataPoint* input) {
+    DataPoint<>* transform(DataPoint<>* input) {
         if (!W) init(input->x.size(), input->y.size());
 
-        Vector preds(size_y, 0.0);
+        Vector<> preds(size_y, 0.0);
         for (unsigned i = 0; i < size_y; i++) {
             preds.at(i) = bias[i];
             for (unsigned j = 0; j < size_x; j++) {
@@ -30,11 +30,11 @@ class perceptron : public transformer {
         std::cout << "Total error: " << tot_error << "\n";
         preds.display("Predictions");
         error->display("Error");
-        return new DataPoint(input->x, preds);
+        return new DataPoint<>(input->x, preds);
     }
 
     float learning_rate = 0.02;
-    Vector *error = nullptr;
+    Vector<> *error = nullptr;
 
     perceptron() {
         name = "Perceptron";
@@ -54,7 +54,7 @@ class perceptron : public transformer {
     void init(unsigned size_x, unsigned size_y) {
         this->size_x = size_x;
         this->size_y = size_y;
-        error = new Vector(size_y);
+        error = new Vector<>(size_y);
 
         bias = new double[size_y];
         // W needs to be initialized from random distribution (or similar)

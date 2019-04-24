@@ -20,50 +20,50 @@ For example, step1.cpp:
 ```cpp
 #include "pipeline.hpp"
 
-class multiplier: public transformer {
-    public:
-        DataPoint* transform(DataPoint* input) {
-            for(int i=0; i<input->size; i++) {
-                input->x[i] *= 5;
-            }
-            return input;
+class multiplier : public transformer {
+   public:
+    DataPoint<>* transform(DataPoint<>* input) {
+        for (unsigned i = 0; i < input->x.size(); i++) {
+            input->x[i] *= 5.0;
         }
+        return input;
+    }
+    multiplier() {
+        name = "Multiplier";
+    }
 };
 
-extern "C" transformer* transformer_factory() {
-        return new multiplier;
-}
+extern "C" transformer* transformer_factory() { return new multiplier; }
 ```
 
 Compile this into a shared library like so:
 ```bash
-g++ -fPIC step1.cpp -shared -o step1.so -std=gnu++11
+g++ -fPIC transformers/step1.cpp -shared -o step1.so -std=c++1z
 ```
 
 In order to run the pipeline, provide a configuration, define a vector, and execute (run_pipeline.cpp):
 ```cpp
 #include "pipeline.hpp"
 
-
 int main() {
     // initialize vector with some elements
-    Vector my_vector(10, 0.0);
-    Vector targets(5, 1.0);
-    DataPoint *row = new DataPoint(my_vector, targets);
-    for(unsigned i=0; i<10; i++) {
+    Vector<double> my_vector(10, 0.0);
+    Vector<double> targets(5, 1.0);
+    DataPoint<double>* row = new DataPoint<double>(my_vector, targets);
+    for (unsigned i = 0; i < 10; i++) {
         my_vector.at(i) = 0.1 * i;
     }
 
     Pipeline* pipeline = new Pipeline("pipeline.lst");
-    DataPoint* result;
-    result = pipeline->exe(row);
+    for(unsigned epoch=0; epoch<100; epoch++)
+        pipeline->exe(row);
     return 0;
 }
 ```
 
 Compile run_pipeline.cpp as follows:
 ```bash
-g++ -std=c++1z run_pipeline.cpp pipeline.cpp -o run_pipeline
+g++ run_pipeline.cpp -o run_pipeline -std=c++1z
 ```
 
 Executing you initialize a vector and then apply the step(s):

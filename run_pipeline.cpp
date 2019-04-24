@@ -2,9 +2,9 @@
 
 int main() {
     // initialize vector with some elements
-    Vector my_vector(10, 0.0);
-    Vector targets(5, 1.0);
-    DataPoint* row = new DataPoint(my_vector, targets);
+    Vector<double> my_vector(10, 0.0);
+    Vector<double> targets(5, 1.0);
+    DataPoint<double>* row = new DataPoint<double>(my_vector, targets);
     for (unsigned i = 0; i < 10; i++) {
         my_vector.at(i) = 0.1 * i;
     }

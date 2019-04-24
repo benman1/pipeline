@@ -2,13 +2,14 @@
 #include <iostream>
 #include <string>
 
+template <class T = double>
 class Vector {
    public:
     Vector(unsigned size) {
 	this->size_ = size;
 	this->allocate();
     };
-    Vector(unsigned size, double val) {
+    Vector(unsigned size, T val) {
 	this->size_ = size;
 	this->allocate();
 	for (unsigned i = 0; i < size; i++) {
@@ -27,29 +28,42 @@ class Vector {
         display();
         return;
     };
-    inline double& at(const unsigned index) {
-	if (index >= size_) {
-	    std::cerr << "Array index " << index << " out of bounds!\n";
-	    exit(-1);
-	}
-	return array[index];
+    inline T& at(const unsigned index) {
+        #if defined(_DEBUG) || defined(NDEBUG)
+        if (index >= size_) {
+            std::cerr << "Array index " << index << " out of bounds!\n";
+            exit(-1);
+        }
+        #endif
+        return array[index];
+        }
+    inline T& operator[](unsigned index) {
+        #if defined(_DEBUG) || defined(NDEBUG)
+        if (index >= size_) {
+            std::cerr << "Array index " << index << " out of bounds!\n";
+            exit(-1);
+        }
+        #endif
+        return array[index];
     }
-    inline double& operator[](unsigned index) { return array[index]; }
     inline unsigned size() { return size_; }
     inline ~Vector() { delete array; }
 
    private:
     unsigned size_;
-    double* array;
-    void allocate() { array = new double[size_]; }
+    T* array;
+    void allocate() { array = new T[size_]; }
 };
 
+
+template<class Tx = double, class Ty = double>
 class DataPoint {
    public:
-    DataPoint(Vector& x) { this->x = x; }
-    DataPoint(Vector& x, Vector& y) {
+    DataPoint(Vector<Tx>& x) { this->x = x; }
+    DataPoint(Vector<Tx>& x, Vector<Ty>& y) {
 	this->x = x;
 	this->y = y;
     }
-    Vector x = NULL, y = NULL;
+    Vector<Tx> x = NULL;
+    Vector<Ty> y = NULL;
 };

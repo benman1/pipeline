@@ -10,7 +10,7 @@
 class transformer {
    public:
     std::string name;
-    virtual DataPoint* transform(DataPoint*) = 0;
+    virtual DataPoint<>* transform(DataPoint<>*) = 0;
     bool trainable = true;  // whether transformer parameters are updated
     // virtual void reset()=0;
     // virtual void load(const char* filename)=0;
@@ -21,7 +21,7 @@ typedef transformer* (*TransformerFactory)();
 
 class Pipeline {
    public:
-    DataPoint* exe(DataPoint* input) {
+    DataPoint<>* exe(DataPoint<>* input) {
         input->x.display();
 
         for (const auto& transformer : this->pipeline) {
