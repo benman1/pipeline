@@ -6,3 +6,4 @@
 *.out
 .clang_complete
 .DS_Store
+pipeline.lst
