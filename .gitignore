@@ -7,3 +7,8 @@
 .clang_complete
 .DS_Store
 pipeline.lst
+/build/
+.cproject
+.project
+.settings/
+dist/
