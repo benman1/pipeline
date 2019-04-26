@@ -3,6 +3,7 @@
 #include "../pipeline.hpp"
 #include "../utils.hpp"
 
+// simple linear regression model with bias
 class perceptron : public transformer {
    public:
     DataPoint<>* transform(DataPoint<>* input) {
@@ -49,7 +50,7 @@ class perceptron : public transformer {
     double *bias = nullptr;
     // w_ij is the weight from input neuron j to projection neuron i
 
-    unsigned size_x, size_y;
+    unsigned size_x=0, size_y=0;
 
     void init(unsigned size_x, unsigned size_y) {
         this->size_x = size_x;

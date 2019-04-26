@@ -15,6 +15,7 @@ class transformer {
     // virtual void reset()=0;
     // virtual void load(const char* filename)=0;
     // virtual void save(const char* filename)=0;
+    virtual ~transformer() {};
 };
 
 typedef transformer* (*TransformerFactory)();
